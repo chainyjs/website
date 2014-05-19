@@ -56,9 +56,15 @@
 			})
 		})
 
+		.swap(function(plugins){
+			return plugins.forEach(function(plugin){
+				console.log(plugin['package'].name+':\n'+plugin.readme+'\n\n')
+			})
+		})
+
 		// Output resul
-		.done(function(err, result){
+		.done(function(err){
 			if (err)  return console.log(err.stack || err)
-			console.log('result:', result)  // result: SOME DATA!
+			console.log('OK');
 		})
 })();
