@@ -2,6 +2,8 @@
 
 @import url('//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
 
+colorLightestGray = #F5FAFC
+colorLightGray = #EAEEF0
 colorGray = #6F6F6F
 colorDarkGray =  #585858
 colorOrange = #EB9528
@@ -9,6 +11,7 @@ colorPink = #E73D51
 colorBlue = #00CAFF
 colorDarkBlue = #08A3E6
 colorJS = #F0DB4F
+colorHeader = #1E313C
 
 
 *
@@ -16,8 +19,10 @@ colorJS = #F0DB4F
 
 body
 	line-height: 0
-	font-family: 'Gotham SSm A', 'Gotham SSm B', Helvetica, Arial, sans-serif;
 	font-smoothing: antialiased
+	background: colorLightGray
+
+	font-family: 'Gotham SSm A', 'Gotham SSm B', Helvetica, Arial, sans-serif;
 
 aside, article
 	line-height: 1.4rem
@@ -25,6 +30,46 @@ aside, article
 
 .main
 	margin-left: 15%
+	font-size: 0.9em
+
+	article
+		font-family: 'Open Sans', 'Droid Sans'
+		font-weight: 400
+
+		margin: 1.5em
+		margin-bottom: 3em
+		background: white
+		padding: 2em
+
+		h1, h2, h3, h4, h5, h6
+			color: colorHeader
+			font-weight: 600
+			font-size: 1.2em
+			margin-top: 2em
+
+			&:first-child
+				padding-top: 0
+				margin-top: 0
+
+		pre
+			background: #D9DEE1
+			border-left: 3px solid #0068A6
+			font-family: 'Source Code Pro'
+			padding: 1em
+			padding-left: 2em
+			margin: 0
+			// margin-left: -2em
+
+		blockquote
+			display: block
+			background: colorLightGray
+			padding: 1em
+			margin: 0
+			margin-top: 2em
+			font-size: 0.9em
+			p:first-child:last-child
+				margin: 0
+
 
 .sidebar
 	position: fixed
@@ -73,15 +118,6 @@ aside, article
 .twitter:before
 		content: "\f099"
 
-article
-	margin: 0
-	padding: 0
-	h1, h2, h3, h4, h5, h6
-		&:first-child
-			padding-top: 0
-			margin-top: 0
-
-
 .sidebar
 	background: colorGray
 	font-weight: bold
@@ -108,12 +144,16 @@ article
 	.guides
 		font-size: 0.8em
 
+	.home
+		background: colorJS
+		color: black
+		text-shadow: none
+
 	.home:hover
 	.home.active
-		&, a
-			background: colorJS
-			color: black
-			text-shadow: none
+		color: white
+		background: colorJS url('/images/chainy-logo.svg') top center
+		text-shadow: 1px 0px 2px black
 
 	.bundles:hover
 	.bundles.active

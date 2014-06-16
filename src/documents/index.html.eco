@@ -36,6 +36,7 @@ layout: default
 					<t render="markdown">
 						<%- page.contentRendered %>
 					</t>
+				</article>
 				<% end %>
 				</article>
 
