@@ -1,6 +1,5 @@
-(function(){
-	"use strict";
-	var Chainy = require('chainy').extend().require(['set', 'log', 'feed', 'map', 'swap']);
+(function(){"use strict";
+	var Chainy = require('chainy').extend().require(['set', 'log', 'feed', 'map', 'swap'])
 	Chainy.create()
 
 		// Fetch the source readme content for each of our repos
@@ -10,12 +9,10 @@
 			Chainy.create()
 				.set({
 					"package": {
-						"url": 'https://raw.githubusercontent.com/'+repo.full_name+'/master/package.json',
-						"parse": "json"
+						"url": 'https://raw.githubusercontent.com/'+repo.full_name+'/master/package.json'
 					},
 					"readme": {
-						"url": 'https://raw.githubusercontent.com/'+repo.full_name+'/master/README.md',
-						parse: false
+						"url": 'https://raw.githubusercontent.com/'+repo.full_name+'/master/README.md'
 					}
 				})
 				.map(function(feed, next){
@@ -26,7 +23,7 @@
 
 		// Extract the content within the <!-- CHAINY -->blah<!-- /CHAINY --> block
 		.map(function(plugin){
-			var temp;
+			var temp = null
 
 			if ( !plugin.readme || !plugin['package'] )  return null
 
@@ -65,6 +62,6 @@
 		// Output resul
 		.done(function(err){
 			if (err)  return console.log(err.stack || err)
-			console.log('OK');
+			console.log('OK')
 		})
-})();
+})()
