@@ -1,0 +1,124 @@
+/* Your styles go here */
+
+@import url('//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+
+colorGray = #6F6F6F
+colorDarkGray =  #585858
+colorOrange = #EB9528
+colorPink = #E73D51
+colorBlue = #00CAFF
+colorDarkBlue = #08A3E6
+colorJS = #F0DB4F
+
+
+*
+	box-sizing: border-box
+
+body
+	line-height: 0
+	font-family: 'Gotham SSm A', 'Gotham SSm B', Helvetica, Arial, sans-serif;
+	font-smoothing: antialiased
+
+aside, article
+	line-height: 1.4rem
+
+
+.main
+	margin-left: 15%
+
+.sidebar
+	position: fixed
+	top: 0
+	left: 0
+	width: 15%
+	height: 100%
+	text-align: center
+	text-transform: uppercase
+
+	display: flex
+	flex-direction: column
+
+	.item
+		flex: 1 0 auto
+
+		&, &.guides a
+			display: flex
+			flex-direction: column
+			justify-content: center
+			align-items: stretch
+
+		&.guides a
+		&.social a
+			flex: 1 0 auto
+
+		&.social
+			align-items: center
+			flex-direction: row
+
+			a.icon
+				margin-bottom: -2px
+
+		&.social
+			max-height: 4em
+
+.github, .twitter
+	font-size: 0
+	&:before
+		font-size: 1rem
+		font-family: FontAwesome
+
+.github:before
+		content: "\f09b"
+
+.twitter:before
+		content: "\f099"
+
+article
+	margin: 0
+	padding: 0
+	h1, h2, h3, h4, h5, h6
+		&:first-child
+			padding-top: 0
+			margin-top: 0
+
+
+.sidebar
+	background: colorGray
+	font-weight: bold
+
+	&, a
+		color: white
+		text-decoration: none
+
+	a:hover
+		text-shadow: 1px 1px black
+
+	.item:hover
+	.item.active
+		background: colorDarkGray
+
+	.guide:hover
+	.guide.active
+		background: colorBlue
+
+	.guides a:hover
+	.guides a.active
+		background: colorDarkBlue
+
+	.guides
+		font-size: 0.8em
+
+	.home:hover
+	.home.active
+		&, a
+			background: colorJS
+			color: black
+			text-shadow: none
+
+	.bundles:hover
+	.bundles.active
+		background: colorPink
+
+	.plugins:hover
+	.plugins.active
+		background: colorOrange

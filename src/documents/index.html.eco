@@ -1,12 +1,47 @@
 ---
-layout: 'default'
+layout: default
 ---
 
-<ul>
-	<% for post in @getCollection('posts').sortArray(date: -1): %>
-	<li>
-		<h3><a href="<%= post.url %>"><%- post.title or post.name %></a></h3>
-		<%- post.description %>
-	</li>
-	<% end %>
-</ul>
+<div class="container">
+
+	<aside class="sidebar">
+		<a class="item home" href="#home">ChainyJS</a></li>
+		<!--<a class="item guide" href="#guide">Guide</a></li>-->
+		<div class="item guides">
+			<a href="#start">Quick Start</a>
+			<a href="#extensions">Mastering Extensions</a>
+			<a href="#create-plugin">Creating Plugins</a>
+			<a href="#create-bundle">Creating Bundles</a>
+		</div>
+
+		<a class="item plugins" href="#plugins">Plugins</a></li>
+		<a class="item bundles" href="#bundles">Bundles</a></li>
+		<div class="item social">
+			<a class="author" href="http://bevry.me">By Bevry</a>
+			<a class="icon github" href="http://github.com/chainyjs">GitHub</a>
+			<a class="icon twitter" href="http://twitter.com/chainyjs">Twitter</a>
+		</div>
+	</aside>
+
+	<section class="main">
+		<div class="wrapper">
+
+			<article id="home" class="home">
+				Chainy is a chainable data pipeline, it's like jQuery for data.
+			</article>
+
+			<section id="guide" class="guide">
+				<% for page in @getCollection('wiki').toJSON(): %>
+				<article id="guide-<%- page.basename.toLowerCase() %>">
+					<t render="markdown">
+						<%- page.contentRendered %>
+					</t>
+				<% end %>
+				</article>
+
+			</section>
+		</div>
+
+	</section>
+
+</div>

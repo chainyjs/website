@@ -91,12 +91,12 @@ docpadConfig = {
 	# http://bevry.me/queryengine/guide
 
 	collections:
-
-		# Create a collection called posts
-		# That contains all the documents that will be going to the out path posts
-		posts: ->
-			@getCollection('documents').findAllLive({relativeOutDirPath: 'posts'})
-
+		wiki: ->
+			@getCollection('documents').findAllLive(
+				relativeDirPath: 'wiki'
+				basename: /^[^_]/
+				filename: $ne: 'Home.md'
+			)
 
 	# =================================
 	# Environments
@@ -114,6 +114,17 @@ docpadConfig = {
 				site:
 					url: false
 
+	# =================================
+	# DocPad Plugins
+
+	plugins:
+		repocloner:
+			repos: [
+				name: 'ChainyJS Wiki'
+				path: 'src/documents/wiki'
+				branch: 'master'
+				url: 'https://github.com/chainyjs/chainy.wiki.git'
+			]
 
 	# =================================
 	# DocPad Events
