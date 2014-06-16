@@ -3,6 +3,7 @@
 @import url('//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
 @import url('//rawgit.com/isagalaev/highlight.js/8.0/src/styles/docco.css')
 
+colorOtherGray = #D9DEE1
 colorLightestGray = #F5FAFC
 colorLightGray = #EAEEF0
 colorGray = #6F6F6F
@@ -20,14 +21,24 @@ colorHeader = #1E313C
 
 body
 	line-height: 0
-	font-smoothing: antialiased
 	background: colorLightGray
+	text-rendering: optimizeLegibility
+	font-smoothing: antialiased
 
-	font-family: 'Gotham SSm A', 'Gotham SSm B', Helvetica, Arial, sans-serif;
+.icon
+	text-rendering: initial
+	font-smoothing: initial
 
 aside, article
 	line-height: 1.4rem
 
+aside
+	font-family: 'Open Sans', 'Droid Sans'
+	font-weight: 700
+
+article
+	font-family: 'Open Sans', 'Droid Sans'
+	font-weight: 400
 
 .main
 	margin-left: 15%
@@ -53,7 +64,7 @@ aside, article
 				margin-top: 0
 
 		pre code
-			// background: #D9DEE1
+			// background: colorOtherGray
 			border-left: 3px solid #0068A6
 			font-family: 'Source Code Pro'
 			padding: 1em
@@ -121,13 +132,12 @@ aside, article
 
 .sidebar
 	background: colorGray
-	font-weight: bold
 
 	&, a
 		color: white
 		text-decoration: none
 
-	a:hover
+	.social a:hover
 		text-shadow: 1px 1px black
 
 	.item:hover
@@ -146,9 +156,14 @@ aside, article
 		font-size: 0.8em
 
 	.home
+		max-height: 10%
 		background: colorJS
 		color: black
 		text-shadow: none
+
+	.plugins
+	.bundles
+		max-height: 15%
 
 	.home:hover
 	.home.active

@@ -8,7 +8,7 @@ layout: default
 		<a class="item home" href="#home">ChainyJS</a></li>
 		<!--<a class="item guide" href="#guide">Guide</a></li>-->
 		<div class="item guides">
-			<a href="#start">Quick Start</a>
+			<a href="#start">Start</a>
 			<a href="#extensions">Mastering Extensions</a>
 			<a href="#create-plugin">Creating Plugins</a>
 			<a href="#create-bundle">Creating Bundles</a>
