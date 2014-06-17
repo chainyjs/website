@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+	<!-- Standard Meta -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Site Properities -->
+	<title>ChainyJS; jQuery-like data pipeline for data</title>
+	<meta name="description" content="ChainyJS is a micro-js framework for node and the browser that lets you create a chain, give it data, then use the chain to modify the data in synchronous, asynchronous, serial, and parallel ways." />
+	<meta name="keywords" content="chainyjs, chainy, micro-js, data-pipeline, highland.js" />
+
+	<!-- DocPad Meta -->
+	<meta name="generator" content="DocPad v6.69.0" />
+
+	<!-- DocPad Styles + Our Own -->
+	<link  rel="stylesheet" href="/vendor/normalize.css" /><link  rel="stylesheet" href="/vendor/h5bp.css" /><link  rel="stylesheet" href="/styles/style.css" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+</head>
+<body>
+	<!--[if lt IE 7]>
+	<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+
+	<div class="container">
+
+	<aside class="sidebar">
+		<a class="item home" href="#home">ChainyJS</a></li>
+		<!--<a class="item guide" href="#guide">Guide</a></li>-->
+		<div class="item guides">
+			<a href="#start">Start</a>
+			<a href="#extensions">Mastering Extensions</a>
+			<a href="#create-plugin">Creating Plugins</a>
+			<a href="#create-bundle">Creating Bundles</a>
+		</div>
+
+		<a class="item plugins" href="#plugins">Plugins</a></li>
+		<a class="item bundles" href="#bundles">Bundles</a></li>
+		<div class="item social">
+			<a class="author" href="http://bevry.me">By Bevry</a>
+			<a class="icon github" href="http://github.com/chainyjs">GitHub</a>
+			<a class="icon twitter" href="http://twitter.com/chainyjs">Twitter</a>
+		</div>
+	</aside>
+
+	<section class="main">
+		<div class="wrapper">
+
+			<article id="home" class="home">
+				Chainy is a chainable data pipeline, it's like jQuery for data.
+			</article>
+
+			<section id="guide" class="guide">
+				
+				<article id="guide-bundles">
+					<h2 id="what-are-bundles-">What are Bundles?</h2>
+<p>Bundles are a great way to automatically install plugins you use again and again. For instance if you use the plugins <code>map</code> and <code>log</code> all the time, you can create a bundle for them, that when installed, will install the bundled plugins.</p>
+<p>Bundles can be installed with Chainy CLI using <code>chainy install-bundle mybundle</code> or with npm using <code>npm install --save chainy-bundle-mybundle</code>.</p>
+<p>Bundles operate by specifying the plugins they bundle as <a href="http://blog.nodejs.org/2013/02/07/peer-dependencies/">peerDependencies</a>. The peer dependencies of a package are automatically installed along with the package that defines them. They are perfect for chainy bundes.</p>
+<h2 id="creating-bundles">Creating Bundles</h2>
+<p>If you find yourself always installing certain plugins again and again, you can create a bundle for them.</p>
+<p>Create a directory for your bundle:</p>
+<pre class="highlight"><code class="hljs bash">mkdir chainy-plugin-mybundle
+<span class="hljs-built_in">cd</span> chainy-plugin-mybundle
+</code></pre>
+<p>Then use the Chainy CLI to create your bundle:</p>
+<pre class="highlight"><code class="hljs bash">chainy create-bundle
+</code></pre>
+<p>Then publish your bundle so that it can be installed by yourself and others:</p>
+<pre class="highlight"><code class="hljs bash">npm publish
+</code></pre>
+<h2 id="power-users">Power Users</h2>
+<p>You can create your bundle manually without the Chainy CLI by simply creating a <code>package.json</code> file with the chainy plugins you want to bundle listed the inside peer dependencies of your bundle&#39;s <code>package.json</code> file, like so:</p>
+<pre class="highlight"><code class="hljs json">{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"chainy-bundle-mybundle"</span></span>,
+  "<span class="hljs-attribute">keywords</span>": <span class="hljs-value">[
+    <span class="hljs-string">"chainy"</span>,
+    <span class="hljs-string">"chainy-addon"</span>,
+    <span class="hljs-string">"chainy-bundle"</span>
+  ]</span>,
+  "<span class="hljs-attribute">peerDependencies</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">chainy-plugin-count</span>": <span class="hljs-value"><span class="hljs-string">"*"</span></span>,
+    "<span class="hljs-attribute">chainy-plugin-log</span>": <span class="hljs-value"><span class="hljs-string">"*"</span></span>,
+    "<span class="hljs-attribute">chainy-plugin-map</span>": <span class="hljs-value"><span class="hljs-string">"*"</span></span>,
+    "<span class="hljs-attribute">chainy-plugin-pipe</span>": <span class="hljs-value"><span class="hljs-string">"*"</span></span>,
+    "<span class="hljs-attribute">chainy-plugin-push</span>": <span class="hljs-value"><span class="hljs-string">"*"</span>
+  </span>}
+</span>}
+</code></pre>
+<blockquote>
+<p>Note: If you are intending on using the above, you&#39;ll probably want to use <code>npm init</code> to create the complete <code>package.json</code> file, then just add the <code>peerDependencies</code> to it, as the above is missing fields like license, author, etc.</p>
+</blockquote>
+
+				</article>
+				
+				<article id="guide-cli">
+					<p>chainy install-plugin <name></p>
+<pre class="highlight"><code class="hljs applescript">    Installs <span class="hljs-keyword">the</span> plugin titled &lt;<span class="hljs-property">name</span>&gt;, <span class="hljs-type">alias</span> <span class="hljs-keyword">for</span>:
+    npm install <span class="hljs-comment">--save chainy-plugin-&lt;name&gt;</span>
+
+
+chainy install-bundle &lt;<span class="hljs-property">name</span>&gt;
+
+    Installs <span class="hljs-keyword">the</span> bundle title &lt;<span class="hljs-property">name</span>&gt;, <span class="hljs-type">alias</span> <span class="hljs-keyword">for</span>:
+    npm install <span class="hljs-comment">--save chainy-bundle-&lt;name&gt;</span>
+
+
+chainy install &lt;<span class="hljs-property">name</span>&gt;
+
+    Attempts <span class="hljs-keyword">to</span> install &lt;<span class="hljs-property">name</span>&gt; <span class="hljs-keyword">as</span> a plugin, <span class="hljs-keyword">if</span> <span class="hljs-keyword">that</span> fails, <span class="hljs-keyword">try</span> <span class="hljs-keyword">as</span> a bundle
+
+
+chainy browserify [optional arguments...]
+
+    Calls <span class="hljs-keyword">the</span> browserify executable, forwarding <span class="hljs-keyword">the</span> arguments you've sent us,
+    <span class="hljs-keyword">as</span> well <span class="hljs-keyword">as</span> requiring all <span class="hljs-keyword">the</span> plugins you have installed
+
+
+chainy create-plugin
+
+    Scaffolds a new plugin structure within <span class="hljs-keyword">the</span> current working directory
+
+
+chainy create-bundle
+
+    Scaffolds a new bundle structure within <span class="hljs-keyword">the</span> current working directory
+</code></pre>
+				</article>
+				
+				<article id="guide-extensions">
+					<p>This page needs for work for Chainy v1.0 release</p>
+<h2 id="writing-extensions">Writing Extensions</h2>
+<p>There are three extension types in Chainy:</p>
+<ul>
+<li><code>action</code>  which is an extension added to the chain&#39;s task runner queue</li>
+<li><code>utility</code> which is an extension added directly to the chain&#39;s object</li>
+<li><code>custom</code>  which is an extension that adds itself</li>
+</ul>
+<p>The default extension type is <code>action</code>, however you should always specify the extension type for clarity and consistency.</p>
+<h3 id="action-extensions">Action Extensions</h3>
+<p>Action extensions are for when you want to perform an action on the data or with it. They are run serially (one after the other, in sequence), ensuring that the previous action has completed, before the next action begins.</p>
+<p>The following defines an action extension that sets the chain&#39;s data with the passed argument:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create()
+    .addExtension(<span class="hljs-string">'mylog'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue)</span>{</span>
+        console.log(currentValue)
+    })
+    .addExtension(<span class="hljs-string">'myset'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue, newValue)</span>{</span>
+        <span class="hljs-keyword">return</span> newValue
+    })
+    .mylog()  <span class="hljs-comment">// null</span>
+    .myset(<span class="hljs-string">'some data'</span>)
+    .mylog()  <span class="hljs-comment">// some data</span>
+</code></pre>
+<p>Actions accept the chain&#39;s current data as the first argument they receive.</p>
+<p>Actions can accept an optional completion callback argument as the last argument. It doesn&#39;t have to be named in any special way, the only condition is that it isn&#39;t provided by the user when they call your action, as it is something we inject ourselves.</p>
+<p>Actions can apply replace the chain&#39;s data with something else, by either returning the new data, or by giving the completion callback the new data.</p>
+<p>Completion callbacks have the signature <code>(err, newData)</code>. If <code>err</code> is defined, then the action is considered failed, and the chain will exit immediately, not running any remaining actions. If <code>newData</code> is defined, it will replace the chain&#39;s data.</p>
+<p>The following defines an action extension that uses a completion callback to set the chain&#39;s data after 10 seconds:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create()
+    .addExtension(<span class="hljs-string">'mylog'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue)</span>{</span>
+        console.log(currentValue)
+    })
+    .addExtension(<span class="hljs-string">'myset'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue, newValue, next)</span>{</span>
+        setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+            <span class="hljs-keyword">return</span> next(<span class="hljs-literal">null</span>, newValue)
+        }, <span class="hljs-number">1000</span>*<span class="hljs-number">10</span>)
+    })
+    .mylog()  <span class="hljs-comment">// null</span>
+    .myset(<span class="hljs-string">'some data'</span>)
+    .mylog()  <span class="hljs-comment">// some data</span>
+</code></pre>
+<p>Actions can accept as many or as little user arguments as they want, however a completion callback must be used if any of the arguments are optional.</p>
+<p>In the above example, <code>mylog</code> accepts no user arguments, only the single <code>currentValue</code> argument that Chainy automatically provides to all actions. Whereas <code>myset</code> accepts the user argument <code>newValue</code> which is set to <code>&#39;some data&#39;</code> in our example.</p>
+<h3 id="utility-extensions">Utility Extensions</h3>
+<p>Utility extensions are for when you want to interact with the chainy instance rather than with its data. It&#39;s useful for extensions like progress bars and debug helpers that listen to the progress of the actions and output data as they complete.</p>
+<p>See the <code>progress</code> plugin for an example of a utility extension that listens to ...</p>
+<h3 id="custom-extensions">Custom Extensions</h3>
+<p>These are not yet documented.</p>
+<h2 id="tips-for-writing-extensions">Tips for writing extensions</h2>
+<ol>
+<li>Keep the API as concise as possible, if you can utilise other extensions, then do it</li>
+<li>Plugin names can only contain lowercase letters, as anything else would be confusing to the user about which naming format to use, hot to use it, and it could possibly cause plugin naming conflicts</li>
+</ol>
+<h2 id="how-extensions-work">How Extensions Work</h2>
+<p>This section may no longer be needed, as the above is newer and may cover the content here.</p>
+<p>Plugins are injected into the Chainy prototype using the <code>Chainy.addPlugin(name, method)</code> method:</p>
+<ul>
+<li><p><code>name</code> is a string for the key that the plugin is inserted at, e.g. <code>Chainy.addPlugin(&#39;hello&#39;, function(){return &#39;world&#39;;})</code> has the plugin injected at <code>Chainy.prototype.hello</code>, making it availably via <code>chainyInstance.hello()</code></p>
+</li>
+<li><p><code>method</code> is a synchronous or asynchronous method that you defined that will perform the action of your plugin</p>
+</li>
+</ul>
+<p>You can also use <code>Chainy.require(arrayOfPlugins)</code> to require bundled plugins with chainy, or to commonjs require an external plugin with the prefix<code>chainy-</code>. For example, running <code>Chainy.require([&#39;set&#39;, &#39;hello&#39;])</code> will require the bundled add plugin and the external plugin with the package name <code>chainy-hello</code>.</p>
+<p>To avoid polluting the global Chainy prototype with your plugins, it is recommended that you use <code>Chainy.extend()</code> to create a local subclass of chainy that you can inject plugins into safely without polluting the global Chainy prototype:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-keyword">var</span> Chainy = <span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).extend().require([<span class="hljs-string">'set'</span>, <span class="hljs-string">'log'</span>, <span class="hljs-string">'done'</span>]);
+</code></pre>
+<p>Things to know about creating plugins:</p>
+<ol>
+<li><p>The context (what <code>this</code> means) of the plugin method is set to the chain that the plugin is executing on:</p>
+<pre class="highlight"><code class="hljs javascript"> <span class="hljs-comment">// when doing the following</span>
+ chainyInstance.hello()
+ <span class="hljs-comment">// the context of hello's plugin method when executed will be that of `chainyInstance`</span>
+</code></pre>
+</li>
+<li><p>The context is important, as your plugin will use it to apply the changes of the data back to the chain:</p>
+<pre class="highlight"><code class="hljs javascript"> Chainy.addPlugin(<span class="hljs-string">'x5'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+     <span class="hljs-keyword">this</span>.data = <span class="hljs-keyword">this</span>.data.map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span>{</span>
+         <span class="hljs-keyword">return</span> value*<span class="hljs-number">5</span>;
+     });
+ });
+ Chainy.create().set([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]).x5().log() <span class="hljs-comment">// [5, 10, 15]</span>
+</code></pre>
+</li>
+<li><p>You can accept arguments in your plugin:</p>
+<pre class="highlight"><code class="hljs javascript"> Chainy.addPlugin(<span class="hljs-string">'x'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(n)</span>{</span>
+     <span class="hljs-keyword">this</span>.data = <span class="hljs-keyword">this</span>.data.map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span>{</span>
+         <span class="hljs-keyword">return</span> value*n;
+     });
+ });
+ Chainy.create().set([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]).x(<span class="hljs-number">10</span>).log() <span class="hljs-comment">// [10, 20, 30]</span>
+</code></pre>
+</li>
+<li><p>You can make your plugin asynchronous by accepting an unspecified-by-the-user completion callback as the last argument:</p>
+<pre class="highlight"><code class="hljs javascript"> Chainy.addPlugin(<span class="hljs-string">'download'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url, next)</span>{</span>
+     <span class="hljs-keyword">var</span> chainyInstance = <span class="hljs-keyword">this</span>;
+     <span class="hljs-built_in">require</span>(<span class="hljs-string">'request'</span>)(url, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, response, body)</span>{</span>
+         <span class="hljs-keyword">if</span> ( err )  <span class="hljs-keyword">return</span> next(err);
+         chainyInstance.data = body;
+         <span class="hljs-keyword">return</span> next();
+     });
+ });
+ Chainy.create().download(<span class="hljs-string">'http://some.url'</span>).log() <span class="hljs-comment">// outputs whatever http://some.url pointed to</span>
+ <span class="hljs-comment">// notice how the user only provides the `url` argument, chainy provides the `next` argument</span>
+</code></pre>
+</li>
+<li><p>Plugin methods aren&#39;t fired directly, instead they are fired as tasks in the taskgroup runner of the chain. This allows tasks to be executed serially (one after the other) as well as safe error handling if a task fails (the chain stop executing more tasks and will exit). You can safely handle errors like so:</p>
+<pre class="highlight"><code class="hljs javascript"> Chainy.addPlugin(<span class="hljs-string">'oops'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'something went wrong!'</span>);
+ });
+ Chainy.create().oops().done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, chainData})</span>{</span>
+     <span class="hljs-keyword">if</span> ( err )  console.log(<span class="hljs-string">'error:'</span>, err.stack or err);
+     console.log(<span class="hljs-string">'data:'</span>, chainData);
+ });
+</code></pre>
+</li>
+</ol>
+
+				</article>
+				
+				<article id="guide-glossary">
+					<ul>
+<li><p>An <code>extension</code> is an addition the chain instance of chain class, it can be of three types:</p>
+<ul>
+<li><code>action</code> added to the chain&#39;s queue</li>
+<li><code>utility</code> added to the chain&#39;s <code>this</code></li>
+<li><code>custom</code> does whatever it wants to the chain</li>
+</ul>
+</li>
+<li><p>A <code>package</code> is an npm package</p>
+<ul>
+<li>They can be published to the npm registry</li>
+</ul>
+</li>
+<li><p>A <code>plugin</code> is an <code>extension</code> that was turned into a <code>package</code></p>
+<ul>
+<li>They can installed and required</li>
+</ul>
+</li>
+<li><p>A <code>bundle</code> is a package containing a collection of <code>plugins</code></p>
+<ul>
+<li>They can be installed <em>but not required</em></li>
+</ul>
+</li>
+</ul>
+
+				</article>
+				
+				<article id="guide-media">
+					<p>Click the images for source and license information.</p>
+<h3 id="logo">Logo</h3>
+<p><a href="https://github.com/bevry/designs/tree/master/chainy" title="Open chainy logo source &amp; license information"><img src="https://raw.githubusercontent.com/bevry/designs/master/chainy/chainy-logo.png" alt="Chainy Logo"/></a></p>
+<h3 id="banner">Banner</h3>
+<p><a href="https://github.com/bevry/designs/tree/master/chainy" title="Open chainy logo source &amp; license information"><img src="https://raw.githubusercontent.com/bevry/designs/master/chainy/chainy-banner.png" alt="Chainy Banner"/></a></p>
+
+				</article>
+				
+				<article id="guide-overview">
+					<h2 id="preparation">Preparation</h2>
+<p>Create your project if you haven&#39;t already done so:</p>
+<pre class="highlight"><code class="hljs bash">mkdir my-chainy-project
+<span class="hljs-built_in">cd</span> my-chainy-project
+</code></pre>
+<p>Initialize your project with a <code>package.json</code> file if you haven&#39;t already done so:</p>
+<pre class="highlight"><code class="hljs bash">npm init
+</code></pre>
+<h2 id="installation">Installation</h2>
+<p>Install the Chainy CLI:</p>
+<pre class="highlight"><code class="hljs bash">npm install -g chainy-cli
+</code></pre>
+<p>Use the Chainy CLI to install chainy and some of the common plugins into our project:</p>
+<pre class="highlight"><code class="hljs bash">chainy install common
+</code></pre>
+<blockquote>
+<p>Bonus: If you&#39;re using node version 0.11 and above, using <code>require(&#39;chainy&#39;).create().require(...)</code> will install any missing plugins automatically for you.</p>
+</blockquote>
+<h2 id="usage">Usage</h2>
+<p>The following uses the built-in actions <code>set</code>, <code>action</code> and <code>done</code>, as well as the plugin action <code>map</code>, to convert each item in the specified array to uppercase then join them together with an exclamation mark at the end:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create().require(<span class="hljs-string">'map'</span>)
+    .set([<span class="hljs-string">'some'</span>, <span class="hljs-string">'data'</span>])
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(itemValue)</span>{</span>
+        <span class="hljs-keyword">return</span> itemValue.toUpperCase()
+    })
+    .action(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentChainValue)</span>{</span>
+        <span class="hljs-keyword">return</span> currentChainValue.join(<span class="hljs-string">' '</span>)
+    })
+    .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, resultChainValue)</span>{</span>
+        <span class="hljs-keyword">if</span> (err)  <span class="hljs-keyword">throw</span> err
+        console.log(<span class="hljs-string">'result:'</span>, resultChainValue)  <span class="hljs-comment">// result: SOME DATA!</span>
+    })
+</code></pre>
+<p>You can also use <code>map</code> and <code>action</code> asynchronously:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create().require(<span class="hljs-string">'map'</span>)
+    .set([<span class="hljs-string">'some'</span>, <span class="hljs-string">'data'</span>])
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(itemValue, next)</span>{</span>
+        <span class="hljs-keyword">return</span> next(<span class="hljs-literal">null</span>, itemValue.toUpperCase())
+    })
+    .action(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentChainValue, next)</span>{</span>
+        <span class="hljs-keyword">return</span> next(<span class="hljs-literal">null</span>, currentChainValue.join(<span class="hljs-string">' '</span>)+<span class="hljs-string">'!'</span>)
+    })
+    .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, resultChainValue)</span>{</span>
+        <span class="hljs-keyword">if</span> (err)  <span class="hljs-keyword">throw</span> err
+        console.log(<span class="hljs-string">'result:'</span>, resultChainValue)  <span class="hljs-comment">// result: SOME DATA!</span>
+    })
+</code></pre>
+<h2 id="use-chainy-on-the-client-side">Use Chainy on the Client-Side</h2>
+<p>You can create a browserify bundle of chainy including all the installed plugins, using the <code>browserify</code> command of the Chainy CLI like so:</p>
+<pre class="highlight"><code class="hljs bash">chainy browserify -o browser.js
+</code></pre>
+<h2 id="power-users">Power Users</h2>
+<p>If you&#39;d prefer to specify exactly which plugins to install (instead of using any bundles), you can do that too (note this should just be part of the normal guide, as this will be intuitively know if we get them install a non-bundled plugin):</p>
+<pre class="highlight"><code class="hljs bash">chainy install-plugin map
+</code></pre>
+<p>If you&#39;d prefer to use npm directly to install plugins and bundles (instead of using the Chainy CLI), you can do that too:</p>
+<pre class="highlight"><code class="hljs bash">npm install --save chainy-bundle-common
+npm install --save chainy-plugin-map
+</code></pre>
+<p>If you&#39;d prefer to specify exactly which installed plugins should be loaded (instead of automatically loading and installing plugins), you can do that too by requiring <code>chainy-core</code> instead of <code>chainy</code>:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy-core'</span>).subclass().require(<span class="hljs-string">'map'</span>).create()
+</code></pre>
+<p>If you&#39;d prefer to specify exactly which installed plugins should be bundled with browserify (instead of automatically bundling all the installed plugins), you can do that too by using browserify directly and manually specifying the plugins to require:</p>
+<pre class="highlight"><code class="hljs bash">npm install -g browserify
+browserify -r chainy-plugin-map -o browser.js
+</code></pre>
+<p>If you&#39;d prefer to define the naming of your included plugins yourself, rather than having them tied directly to the plugin&#39;s name, you can do that too:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create()
+    .addExtension(<span class="hljs-string">'mapwithcustomname'</span>, <span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy-plugin-map'</span>))
+    <span class="hljs-comment">// ...</span>
+    .mapwithcustomname(...)
+    <span class="hljs-comment">// ...</span>
+</code></pre>
+<p>This custom name ability is useful for when you want to use your super awesome plugin with the same name as another very commonly named plugin:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create()
+    .addExtension(<span class="hljs-string">'map'</span>, <span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy-plugin-myawesomemap'</span>))
+    <span class="hljs-comment">// ...</span>
+    .map(...)
+    <span class="hljs-comment">// ...</span>
+</code></pre>
+
+				</article>
+				
+				<article id="guide-plugins">
+					<h2 id="creating-plugins">Creating Plugins</h2>
+<p>If you&#39;ve created an extension that you love, you can share it with others by making it into a plugin.</p>
+<h3 id="preparation">Preparation</h3>
+<p>First create a new directory for your plugin to live in:</p>
+<pre class="highlight"><code class="hljs bash">mkdir chainy-plugin-myplugin
+<span class="hljs-built_in">cd</span> chainy-plugin-myplugin
+</code></pre>
+<h3 id="scaffolding">Scaffolding</h3>
+<p>Use the Chainy CLI to scaffold the structure of your plugin (it will ask you a few questions):</p>
+<pre class="highlight"><code class="hljs bash">chainy create-plugin
+</code></pre>
+<h3 id="writing-your-plugin">Writing your Plugin</h3>
+<p>Inside <code>lib/yourPluginName.js</code> convert your extension from something that looks like this:</p>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-comment">// uses the `addExtension` API call to define an action extension called `set`</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create().addExtension(<span class="hljs-string">'set'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue, newValue)</span>{</span>
+    <span class="hljs-keyword">return</span> newValue
+})
+
+<span class="hljs-comment">// or even something that looks like this, which</span>
+<span class="hljs-comment">// uses the `action` API call to execute an unnamed action</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create().action(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue, newValue)</span>{</span>
+    <span class="hljs-keyword">return</span> newValue
+})
+</code></pre>
+<p>Into something that looks like this:</p>
+<pre class="highlight"><code class="hljs javascript">module.exports = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue, newValue)</span>{</span>
+    <span class="hljs-keyword">return</span> newValue
+}
+module.exports.extensionType = <span class="hljs-string">'action'</span>
+</code></pre>
+<h3 id="publishing-your-plugin">Publishing your Plugin</h3>
+<p>Then publish your plugin so that it can be installed by yourself and others:</p>
+<pre class="highlight"><code class="hljs bash">npm publish
+</code></pre>
+
+				</article>
+				
+				<article id="guide-roadmap">
+					<h2 id="roadmap-to-v1-0">Roadmap to v1.0</h2>
+<p>Essentials:</p>
+<ul>
+<li>[x] Get it awesome</li>
+<li>[x] Get it working</li>
+<li>[x] Figure out extension API</li>
+<li>[x] Prevent base prototypes from being extended</li>
+<li>[x] Figure out how plugins and bundles will be created and installed</li>
+<li>[x] Figure out whether to keep the name <code>extensions</code> or go back to <code>plugins</code> (done, see [[Glossary]])</li>
+<li>[x] Have <code>Chainy.prototype.create()</code> keep the parent&#39;s extensions</li>
+<li>[x] Rip out plugins from main repo</li>
+<li>[ ] Finished publishing ripped out plugins</li>
+<li>[ ] Create the Chainy CLI<ul>
+<li>[ ] Create plugins for Chainy for interacting with the CLI</li>
+<li>[x] Figure out whether to publish <code>chainy-autoload</code>, or <code>chainy-core</code><ul>
+<li>Most probably <code>autoload</code> can be a plugin, that <code>chainy</code> uses, with <code>chainy</code> using <code>chainy-core</code></li>
+</ul>
+</li>
+<li>[x] Figure out if the overhead of having the CLI inside <code>chainy</code> is worth it, as the CLI will be installed for every module, when it doesn&#39;t have to be. Perhaps best to publish <code>chainy-cli</code>, that then exposes <code>chainy</code> (it&#39;s not, renamed CLI in docs to <code>chainy-cli</code>)</li>
+</ul>
+</li>
+<li>[ ] Finish the documentation</li>
+</ul>
+<p>Optionals:</p>
+<ul>
+<li>[ ] Create a website</li>
+<li>[ ] Create a <code>fork</code> and <code>upstream</code> extension</li>
+</ul>
+<h2 id="roadmap-to-v2-0">Roadmap to v2.0</h2>
+<p>There will be hopefully be no v2.0. Chainy will be final at v1.0, with innovations now occurring in plugins.</p>
+
+				</article>
+				
+				<article id="guide-showcase-wishlist">
+					<p>A place to add things that you wish were possible:</p>
+<h2 id="static-site-generator">Static Site Generator</h2>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-comment">// Example is conceptual at this stage</span>
+<span class="hljs-keyword">var</span> Chainy = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../'</span>).extend().require([<span class="hljs-string">'loadFiles'</span>, <span class="hljs-string">'writeFiles'</span>]);
+
+Chainy.create()
+    .addPlugin(<span class="hljs-string">'coffeekupFiles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(opts, next)</span>{</span>
+        <span class="hljs-keyword">this</span>.create().require([<span class="hljs-string">'set'</span>, <span class="hljs-string">'query'</span>, <span class="hljs-string">'map'</span>])
+            .set(<span class="hljs-keyword">this</span>.data)
+            .query({path: {$grep: <span class="hljs-string">'src/documents/**/*.html.coffee*'</span>}})
+            .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(file, complete)</span>{</span>
+                <span class="hljs-keyword">this</span>.create().require([<span class="hljs-string">'set'</span>, <span class="hljs-string">'coffeekup'</span>, <span class="hljs-string">'done'</span>])
+                    .set(file.content)
+                    .coffeekup(opts)
+                    .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, result)</span>{</span>
+<span class="hljs-keyword">if</span> (err)  <span class="hljs-keyword">return</span> complete(err, file);
+file.content = result;
+<span class="hljs-keyword">return</span> complete(<span class="hljs-literal">null</span>, file);
+                    });
+            })
+            .done(next);
+    })
+    .loadFiles(<span class="hljs-string">'src/documents'</span>)
+    .coffeekupFiles()
+    .writeFiles();
+</code></pre>
+
+				</article>
+				
+				<article id="guide-showcase">
+					<p>A place to showcase the cool chains you&#39;ve put together</p>
+<h3 id="geojson-your-github-community">Geojson your github community</h3>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy-core'</span>).create().require(<span class="hljs-string">'set feed flatten count uniq hasfield map geocode swap pipe log'</span>)
+    <span class="hljs-comment">// Specifiy the github organisations to fetch members for</span>
+    .set([<span class="hljs-string">'bevry'</span>, <span class="hljs-string">'browserstate'</span>, <span class="hljs-string">'ideashare'</span>, <span class="hljs-string">'interconnectapp'</span>, <span class="hljs-string">'docpad'</span>])
+
+    <span class="hljs-comment">// Fetch the public members for the organisations</span>
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(org, complete)</span>{</span>
+        <span class="hljs-keyword">this</span>.create()
+            .set(<span class="hljs-string">"https://api.github.com/orgs/"</span>+org+<span class="hljs-string">"/public_members"</span>)
+            .feed()
+            .done(complete)
+    })
+
+    <span class="hljs-comment">// Merge the results of each organisation together into one flat array</span>
+    .flatten().count()
+
+    <span class="hljs-comment">// As a github user could be in multiple organisations, lets ensure duplicates are removed</span>
+    .uniq(<span class="hljs-string">'id'</span>).count()
+
+    <span class="hljs-comment">// Now lets replace the shallow member details with their full github profile details via the profile api</span>
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(user, complete)</span>{</span>
+        <span class="hljs-keyword">this</span>.create()
+            .set(user.url)
+            .feed()
+            .done(complete)
+    })
+
+    <span class="hljs-comment">// Lets remove any profiles that don't have a location sepcified</span>
+    .hasfield(<span class="hljs-string">'location'</span>).count()
+
+    <span class="hljs-comment">// With the location, geocode it, and set the result to the coordinates field</span>
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(user, complete)</span>{</span>
+        <span class="hljs-keyword">this</span>.create()
+            .set(user.location)
+            .geocode()
+            .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, result)</span>{</span>
+                <span class="hljs-keyword">if</span> (err)  <span class="hljs-keyword">return</span> complete(err, user);
+                user.coordinates = result;
+                <span class="hljs-keyword">return</span> complete(<span class="hljs-literal">null</span>, user);
+            });
+    })
+
+    <span class="hljs-comment">// Remove any users where geocoding failed</span>
+    .hasfield(<span class="hljs-string">'coordinates'</span>).count()
+
+    <span class="hljs-comment">// Convert the user profiles into geojson entries</span>
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(user)</span>{</span>
+        <span class="hljs-keyword">return</span> {
+            type: <span class="hljs-string">'Feature'</span>,
+            properties: {
+                githubUsername: user.login
+            },
+            geometry: {
+                type: <span class="hljs-string">'Point'</span>,
+                coordinates: user.coordinates
+            }
+        };
+    })
+
+    <span class="hljs-comment">// Wrap the user geojson entries into a geojson file</span>
+    .swap(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span>{</span>
+        <span class="hljs-keyword">return</span> {
+            type: <span class="hljs-string">'FeatureCollection'</span>,
+            features: data
+        };
+    })
+
+    <span class="hljs-comment">// Prepare the geojson data for writing by making it pretty</span>
+    .swap(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span>{</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">JSON</span>.stringify(data, <span class="hljs-literal">null</span>, <span class="hljs-string">'\t'</span>);
+    })
+
+    <span class="hljs-comment">// Write the geojson data to a file on our computer</span>
+    .pipe(
+        <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).createWriteStream(__dirname+<span class="hljs-string">'/out.geojson'</span>)
+    )
+
+    <span class="hljs-comment">// Handle success and possible errors</span>
+    .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, result)</span>{</span>
+        <span class="hljs-keyword">if</span> ( err ) {
+            console.log(err.stack || err);
+        } <span class="hljs-keyword">else</span> {
+            console.log(<span class="hljs-string">'completed successfully without errors'</span>);
+        }
+    });
+</code></pre>
+<h3 id="get-git-branches-as-an-array">Get git branches as an array</h3>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-comment">// Fetch the cwd's branches, and convert them into an array</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create().require(<span class="hljs-string">'set exec swap log'</span>)
+    .set(<span class="hljs-string">'git branch --no-color'</span>)
+    .exec()
+    .swap(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span>{</span>
+        <span class="hljs-keyword">return</span> value.replace(<span class="hljs-string">'*'</span>, <span class="hljs-string">''</span>).replace(<span class="hljs-regexp">/ |^\s+|\s+$/g</span>, <span class="hljs-string">''</span>).split(<span class="hljs-string">'\n'</span>);
+    })
+    .log();
+</code></pre>
+<h3 id="delete-git-branches-from-the-remote">Delete git branches from the remote</h3>
+<pre class="highlight"><code class="hljs javascript"><span class="hljs-comment">// Fetch the cwd's branches, and delete each of them except master from the git remote</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'chainy'</span>).create().require(<span class="hljs-string">'set exec swap each'</span>)
+    .set(<span class="hljs-string">'git branch --no-color'</span>)
+    .exec()
+    .swap(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span>{</span>
+        <span class="hljs-keyword">return</span> value.replace(<span class="hljs-string">'*'</span>, <span class="hljs-string">''</span>).replace(<span class="hljs-regexp">/ /g</span>, <span class="hljs-string">''</span>).split(<span class="hljs-string">'\n'</span>).filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span>{</span>
+            <span class="hljs-keyword">if</span> ( value === <span class="hljs-string">'master'</span> )  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        });
+    })
+    .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value, complete)</span>{</span>
+        <span class="hljs-keyword">this</span>.create()
+            .exec(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-string">'git push origin :'</span>+value;
+            })
+            .done(complete)
+    })
+</code></pre>
+
+				</article>
+				
+				</article>
+
+			</section>
+		</div>
+
+	</section>
+
+</div>
+
+	<!-- DocPad Scripts + Our Own -->
+	
+</body>
+</html>
