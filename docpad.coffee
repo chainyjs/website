@@ -13,25 +13,25 @@ docpadConfig = {
 		site:
 			# The production url of our website
 			# If not set, will default to the calculated site URL (e.g. http://localhost:9778)
-			url: "http://website.com"
+			url: "http://chainyjs.org"
 
 			# Here are some old site urls that you would like to redirect from
 			oldUrls: [
-				'www.website.com',
-				'website.herokuapp.com'
+				'chainyjs.github.io',
+				'chainyjs.herokuapp.com'
 			]
 
 			# The default title of our website
-			title: "Your Website"
+			title: "ChainyJS; jQuery-like data pipeline for data"
 
 			# The website description (for SEO)
 			description: """
-				When your website appears in search results in say Google, the text here will be shown underneath your website's title.
+				ChainyJS is a micro-js framework for node and the browser that lets you create a chain, give it data, then use the chain to modify the data in synchronous, asynchronous, serial, and parallel ways.
 				"""
 
 			# The website keywords (for SEO) separated by commas
 			keywords: """
-				place, your, website, keywoards, here, keep, them, related, to, the, content, of, your, website
+				chainyjs, chainy, micro-js, data-pipeline, highland.js
 				"""
 
 			# The website's styles
@@ -42,7 +42,7 @@ docpadConfig = {
 			]
 
 			# The website's scripts
-			scripts: [
+			scripts: [] or [
 				"""
 				<!-- jQuery -->
 				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
